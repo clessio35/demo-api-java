@@ -1,9 +1,5 @@
 package demo.project.api.service;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +61,16 @@ public class DummyService {
             String email = user.get("email").toString();
             Assert.assertTrue(email.contains("@"));
 
+            Assert.assertNotNull(user.get("username"));
+            String username = user.get("username").toString();
+            Assert.assertFalse(username.trim().isEmpty());
+
+            Assert.assertNotNull(user.get("password"));
+            String password = user.get("password").toString();
+            Assert.assertFalse(password.trim().isEmpty());
+
+            System.out.println("User -> " + username + " - Password -> " + password);
+
             Object addressObj = user.get("address");
             Assert.assertNotNull(addressObj);
             Assert.assertTrue(addressObj instanceof Map);
@@ -83,4 +89,5 @@ public class DummyService {
             System.out.println("Validate user ID: " + user.get("id"));
         }
     }
+
 }
