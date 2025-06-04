@@ -152,19 +152,20 @@ public class DummyService {
 		 token = accessToken;
 		 System.out.println("Extracted Token: " + token);
 	}
+	
 	public void sendGetRequestWithAuth(String endpoint) {
 			System.out.println("REQUEST GET -> " + endpoint);
 			tokenCaptured();
 			response = RestAssured.given().log().body()
 					.contentType(ContentType.JSON)
-					.header("Authorization", "Bearer "+token)
+					.header("Authorization", "Bearer "+ token)
 					.when()
 					.get(endpoint);
 	}
 
 	public void validateResponseForProducts() {
 		System.out.println("Validate products");
-		response.then().log().body().extract();
+		response.then().statusCode(200).log().body().extract();
 		List<Map<String, Object>> products = response.jsonPath().getList("products");
 		
 		Assert.assertFalse(products.isEmpty());
@@ -182,6 +183,22 @@ public class DummyService {
 			Object imagesObj = product.get("images");
 			Assert.assertNotNull(imagesObj);
 		}
+	}
+
+	public void sendGetRequestWithoutAuth(String endpoint) {
+		System.out.println("REQUEST GET -> " + endpoint);
+		response = RestAssured.given()
+				.contentType(ContentType.JSON)
+				.header("Authorization", "Bearer 2132435565464646")
+				.when().log().body()
+				.get(endpoint);
+	}
+
+	public void validateResponseForProductsWithouToken() {
+		System.out.println("Validate products without token");
+		response.then().log().body()
+			.body("message", Matchers.equalTo("Invalid/Expired Token!"))
+			.extract().body();
 	}
 
 }

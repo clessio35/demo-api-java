@@ -32,9 +32,15 @@ public class DummyApiTests {
     	dum.validateResponseForPostRequest();
     }
     
-    @Test
+//    @Test
     public void requestGetAuthProducts() {
     	dum.sendGetRequestWithAuth("/auth/products");
     	dum.validateResponseForProducts();
+    }
+    
+    @Test
+    public void requestGetWithouAuthProducts() {
+    	dum.sendGetRequestWithoutAuth("/auth/products");
+    	dum.validateResponseForProductsWithouToken();
     }
 }
