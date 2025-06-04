@@ -26,9 +26,15 @@ public class DummyApiTests {
         dum.validateResponseForRequestGetUsers();
     }
     
-    @Test
+//    @Test
     public void requestPOSTAuthToken() {
     	dum.sendPostRequest("/auth/login");
     	dum.validateResponseForPostRequest();
+    }
+    
+    @Test
+    public void requestGetAuthProducts() {
+    	dum.sendGetRequestWithAuth("/auth/products");
+    	dum.validateResponseForProducts();
     }
 }

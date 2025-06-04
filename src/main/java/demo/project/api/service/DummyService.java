@@ -26,7 +26,9 @@ public class DummyService {
 
 	public void sendGetRequest(String endpoint) {
 		System.out.println("REQUEST GET -> " + endpoint);
-		response = RestAssured.given().log().body().when().contentType(ContentType.JSON).get(endpoint);
+		response = RestAssured.given().log().body()
+				.contentType(ContentType.JSON)
+				.when().get(endpoint);
 	}
 
 	public void validateResponseForRequestGet() {
@@ -118,7 +120,7 @@ public class DummyService {
 	public void sendPostRequest(String endpoint) {
 		System.out.println("Send post request");
 		response = RestAssured.given().log().body()
-				.when().contentType(ContentType.JSON)
+				.contentType(ContentType.JSON).when()
 				.body(payloadAuth().toString())
 				.post(endpoint);
 	}
@@ -137,6 +139,49 @@ public class DummyService {
 		 String accessToken = response.jsonPath().getString("accessToken");
 		 token = accessToken;
 		 System.out.println("Extracted Token: " + token);
+	}
+
+	public void tokenCaptured() {
+		System.out.println("token in process");
+		response = RestAssured.given().log().body()
+				.contentType(ContentType.JSON).when()
+				.body(payloadAuth().toString())
+				.post("/auth/login");
+		response.then().statusCode(200).log().body();
+		 String accessToken = response.jsonPath().getString("accessToken");
+		 token = accessToken;
+		 System.out.println("Extracted Token: " + token);
+	}
+	public void sendGetRequestWithAuth(String endpoint) {
+			System.out.println("REQUEST GET -> " + endpoint);
+			tokenCaptured();
+			response = RestAssured.given().log().body()
+					.contentType(ContentType.JSON)
+					.header("Authorization", "Bearer "+token)
+					.when()
+					.get(endpoint);
+	}
+
+	public void validateResponseForProducts() {
+		System.out.println("Validate products");
+		response.then().log().body().extract();
+		List<Map<String, Object>> products = response.jsonPath().getList("products");
+		
+		Assert.assertFalse(products.isEmpty());
+		for (Map<String, Object> product : products) {
+			Assert.assertNotNull(product.get("id"));
+			Assert.assertNotNull(product.get("title"));
+			Assert.assertNotNull(product.get("description"));
+			Assert.assertNotNull(product.get("price"));
+			Assert.assertNotNull(product.get("discountPercentage"));
+			Assert.assertNotNull(product.get("rating"));
+			Assert.assertNotNull(product.get("stock"));
+			Assert.assertNotNull(product.get("tags"));
+			Assert.assertNotNull(product.get("thumbnail"));
+			Assert.assertNotNull(product.get("images"));			
+			Object imagesObj = product.get("images");
+			Assert.assertNotNull(imagesObj);
+		}
 	}
 
 }
