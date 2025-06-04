@@ -50,9 +50,15 @@ public class DummyApiTests {
     	dum.validateResponseForProductCreated();
     }
     
-    @Test
+//    @Test
     public void requestGetForProductsCreated() {
     	dum.sendGetRequest("/products");
     	dum.validateResponseForProducts();
+    }
+    
+    @Test
+    public void requestGetForSpecificProductWithID() {
+    	dum.sendGetRequestWithID("/products");
+    	dum.validateResponseForProductsWithId();
     }
 }

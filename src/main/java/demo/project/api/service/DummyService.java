@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -12,6 +13,7 @@ import com.github.javafaker.Faker;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 
 public class DummyService {
@@ -244,6 +246,39 @@ public class DummyService {
 			.extract().body();
 	}
 
+	public Integer capturedId() {
+		System.out.println("product id");
+		response = RestAssured.given().log().body()
+				.contentType(ContentType.JSON).when()
+				.get("/products");
+		response.then().statusCode(200).log().body();
+		List<Integer> ids = response.jsonPath().getList("products.id");
+		Integer id = ids.get(0);
+		System.out.println("id: " + id);
+		return id;
+	}
+	public void sendGetRequestWithID(String endpoint) {
+		Integer id = capturedId();
+		System.out.println("REQUEST GET -> " + endpoint + " id: " + id);
+		response = RestAssured.given()
+				.contentType(ContentType.JSON)
+				.when().get(endpoint + "/" + id);
+	}
+
+	public void validateResponseForProductsWithId() {
+		System.out.println("Validate product with id");
+		response.then()
+			.log().body()
+			.body("id", Matchers.instanceOf(Integer.class))
+			.body("title", Matchers.instanceOf(String.class))
+			.body("price", Matchers.notNullValue())
+			.body("stock", Matchers.notNullValue())
+			.body("rating", Matchers.notNullValue())
+			.body("thumbnail", Matchers.notNullValue())
+			.body("description", Matchers.instanceOf(String.class))
+			.body("brand", Matchers.instanceOf(String.class))
+			.body("category", Matchers.instanceOf(String.class)).extract().response();
+	}
 
 
 }
