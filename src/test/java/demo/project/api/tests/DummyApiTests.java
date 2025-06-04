@@ -28,7 +28,7 @@ public class DummyApiTests {
     
 //    @Test
     public void requestPOSTAuthToken() {
-    	dum.sendPostRequest("/auth/login");
+    	dum.sendPostRequestForAuthToken("/auth/login");
     	dum.validateResponseForPostRequest();
     }
     
@@ -38,9 +38,15 @@ public class DummyApiTests {
     	dum.validateResponseForProducts();
     }
     
-    @Test
+//    @Test
     public void requestGetWithouAuthProducts() {
     	dum.sendGetRequestWithoutAuth("/auth/products");
     	dum.validateResponseForProductsWithouToken();
+    }
+    
+    @Test
+    public void requestPostForCreatingProducts() {
+    	dum.sendPostRequestForCreatingProducts("/products/add");
+    	dum.validateResponseForProductCreated();
     }
 }

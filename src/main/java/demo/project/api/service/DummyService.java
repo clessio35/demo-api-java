@@ -8,6 +8,8 @@ import org.hamcrest.Matchers;
 import org.json.JSONObject;
 import org.junit.Assert;
 
+import com.github.javafaker.Faker;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -117,7 +119,7 @@ public class DummyService {
 		return json;
 	}
 
-	public void sendPostRequest(String endpoint) {
+	public void sendPostRequestForAuthToken(String endpoint) {
 		System.out.println("Send post request");
 		response = RestAssured.given().log().body()
 				.contentType(ContentType.JSON).when()
@@ -198,6 +200,46 @@ public class DummyService {
 		System.out.println("Validate products without token");
 		response.then().log().body()
 			.body("message", Matchers.equalTo("Invalid/Expired Token!"))
+			.extract().body();
+	}
+	
+	public JSONObject payloadProduct() {
+		Faker faker = new Faker();
+		HashMap<String, Object> product = new HashMap<String, Object>();
+		product.put("title", faker.commerce().productName());
+        product.put("description", faker.lorem().sentence());
+        product.put("price", faker.number().numberBetween(10, 100));
+        product.put("discountPercentage", faker.number().randomDouble(1, 5, 15));
+        product.put("rating", faker.number().randomDouble(2, 3, 5));
+        product.put("stock", faker.number().numberBetween(10, 100));
+        product.put("brand", faker.company().name());
+        product.put("category", "fragrances");
+        product.put("thumbnail", faker.internet().url() + ".png");
+        JSONObject json = new JSONObject(product);
+        return json;
+	}
+
+	public void sendPostRequestForCreatingProducts(String endpoint) {
+		System.out.println("Creating products");
+		response = RestAssured.given()
+				.log().body()
+				.contentType(ContentType.JSON).when()
+				.body(payloadProduct().toString())
+				.post(endpoint);
+	}
+
+	public void validateResponseForProductCreated() {
+		System.out.println("Validate product created");
+		response.then().statusCode(201).log().body()
+			.body("id", Matchers.instanceOf(Integer.class))
+			.body("title", Matchers.instanceOf(String.class))
+			.body("price", Matchers.instanceOf(Integer.class))
+			.body("stock", Matchers.instanceOf(Integer.class))
+			.body("rating", Matchers.notNullValue())
+			.body("thumbnail", Matchers.instanceOf(String.class))
+			.body("description", Matchers.instanceOf(String.class))
+			.body("brand", Matchers.instanceOf(String.class))
+			.body("category", Matchers.instanceOf(String.class))
 			.extract().body();
 	}
 
