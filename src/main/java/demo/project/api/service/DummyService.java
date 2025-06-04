@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -13,7 +12,6 @@ import com.github.javafaker.Faker;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
 
 public class DummyService {
@@ -257,6 +255,7 @@ public class DummyService {
 		System.out.println("id: " + id);
 		return id;
 	}
+	
 	public void sendGetRequestWithID(String endpoint) {
 		Integer id = capturedId();
 		System.out.println("REQUEST GET -> " + endpoint + " id: " + id);
@@ -267,7 +266,7 @@ public class DummyService {
 
 	public void validateResponseForProductsWithId() {
 		System.out.println("Validate product with id");
-		response.then()
+		response.then().statusCode(200)
 			.log().body()
 			.body("id", Matchers.instanceOf(Integer.class))
 			.body("title", Matchers.instanceOf(String.class))
@@ -280,5 +279,10 @@ public class DummyService {
 			.body("category", Matchers.instanceOf(String.class)).extract().response();
 	}
 
-
+	public void validateResponseWithInvalidId() {
+		System.out.println("validate invalid id");
+		response.then().statusCode(404).log().body()
+		.body("message", Matchers.equalTo("Product with id '0' not found"))
+		.extract().response();
+	}
 }

@@ -14,43 +14,43 @@ public class DummyApiTests {
         dum.accessApi();        
     }
 
-//    @Test
+    @Test
     public void requestGETMethodForEndpointTEST() {
         dum.sendGetRequest("/test");
         dum.validateResponseForRequestGet();
     }
 
-//    @Test
+    @Test
     public void requestGETMethodForEndpointUSERS() {
         dum.sendGetRequest("/users");
         dum.validateResponseForRequestGetUsers();
     }
     
-//    @Test
+    @Test
     public void requestPOSTAuthToken() {
     	dum.sendPostRequestForAuthToken("/auth/login");
     	dum.validateResponseForPostRequest();
     }
     
-//    @Test
+    @Test
     public void requestGetAuthProducts() {
     	dum.sendGetRequestWithAuth("/auth/products");
     	dum.validateResponseForProducts();
     }
     
-//    @Test
+    @Test
     public void requestGetWithouAuthProducts() {
     	dum.sendGetRequestWithoutAuth("/auth/products");
     	dum.validateResponseForProductsWithouToken();
     }
     
-//    @Test
+    @Test
     public void requestPostForCreatingProducts() {
     	dum.sendPostRequestForCreatingProducts("/products/add");
     	dum.validateResponseForProductCreated();
     }
     
-//    @Test
+    @Test
     public void requestGetForProductsCreated() {
     	dum.sendGetRequest("/products");
     	dum.validateResponseForProducts();
@@ -60,5 +60,11 @@ public class DummyApiTests {
     public void requestGetForSpecificProductWithID() {
     	dum.sendGetRequestWithID("/products");
     	dum.validateResponseForProductsWithId();
+    }
+    
+    @Test
+    public void requestGetInvalidId() {
+    	dum.sendGetRequest("/products/0");
+    	dum.validateResponseWithInvalidId();
     }
 }
