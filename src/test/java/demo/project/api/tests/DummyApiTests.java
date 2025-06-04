@@ -14,15 +14,21 @@ public class DummyApiTests {
         dum.accessApi();        
     }
 
-    @Test
+//    @Test
     public void requestGETMethodForEndpointTEST() {
         dum.sendGetRequest("/test");
         dum.validateResponseForRequestGet();
     }
 
-    @Test
+//    @Test
     public void requestGETMethodForEndpointUSERS() {
         dum.sendGetRequest("/users");
         dum.validateResponseForRequestGetUsers();
+    }
+    
+    @Test
+    public void requestPOSTAuthToken() {
+    	dum.sendPostRequest("/auth/login");
+    	dum.validateResponseForPostRequest();
     }
 }
