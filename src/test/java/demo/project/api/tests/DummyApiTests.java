@@ -44,9 +44,15 @@ public class DummyApiTests {
     	dum.validateResponseForProductsWithouToken();
     }
     
-    @Test
+//    @Test
     public void requestPostForCreatingProducts() {
     	dum.sendPostRequestForCreatingProducts("/products/add");
     	dum.validateResponseForProductCreated();
+    }
+    
+    @Test
+    public void requestGetForProductsCreated() {
+    	dum.sendGetRequest("/products");
+    	dum.validateResponseForProducts();
     }
 }

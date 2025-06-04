@@ -184,6 +184,7 @@ public class DummyService {
 			Assert.assertNotNull(product.get("images"));			
 			Object imagesObj = product.get("images");
 			Assert.assertNotNull(imagesObj);
+			System.out.println("Validated!");
 		}
 	}
 
@@ -242,5 +243,7 @@ public class DummyService {
 			.body("category", Matchers.instanceOf(String.class))
 			.extract().body();
 	}
+
+
 
 }
