@@ -1,0 +1,12 @@
+stages:
+  - test
+
+test_api:
+  stage: test
+  image: maven:3.8.5-openjdk-17
+  script:
+    - mvn test
+  artifacts:
+    paths:
+      - target/extentReport.html
+    expire_in: 1 week
