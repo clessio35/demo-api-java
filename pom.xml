@@ -5,11 +5,13 @@
 	<groupId>demo-api-java</groupId>
 	<artifactId>project-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
 	<dependencies>
 		<!-- JUnit -->
 		<dependency>
@@ -67,14 +69,23 @@
 			<artifactId>extentreports</artifactId>
 			<version>5.0.9</version>
 		</dependency>
-		
-		<!-- SLF4J (necessário para ExtentReports) -->
+
+		<!-- SLF4J para ExtentReports -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.36</version>
 		</dependency>
+
+		<!-- Lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.32</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
 			<!-- Compilador Java -->
@@ -86,6 +97,11 @@
 					<source>17</source>
 					<target>17</target>
 					<encoding>UTF-8</encoding>
+					<compilerArgs>
+						<!-- Corrige problema de acesso do Lombok ao JDK 17 -->
+						<arg>--add-exports</arg>
+						<arg>jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 
@@ -101,7 +117,6 @@
 					</includes>
 					<testFailureIgnore>false</testFailureIgnore>
 					<argLine>-Dfile.encoding=UTF-8</argLine>
-					<!-- Relatório em XML para integração com ferramentas CI -->
 					<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
 				</configuration>
 			</plugin>
