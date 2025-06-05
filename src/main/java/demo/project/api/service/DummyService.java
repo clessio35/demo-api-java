@@ -59,7 +59,7 @@ public class DummyService {
     }
 
     public void validateResponseForRequestGet() {
-        log("VALIDATE RESPONSE OF Dummy");
+        log("VALIDATE RESPONSE OF GET Method");
         response.then().statusCode(200).log().body()
                 .body("status", Matchers.equalTo("ok"))
                 .body("method", Matchers.equalTo("GET")).extract();
